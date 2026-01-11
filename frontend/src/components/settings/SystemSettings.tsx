@@ -59,7 +59,7 @@ const SystemSettings: React.FC = () => {
 
       <Grid container spacing={3}>
         {/* 用户信息设置 */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -113,7 +113,7 @@ const SystemSettings: React.FC = () => {
         </Grid>
 
         {/* 界面设置 */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -150,7 +150,7 @@ const SystemSettings: React.FC = () => {
         </Grid>
 
         {/* 系统设置 */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -192,7 +192,7 @@ const SystemSettings: React.FC = () => {
         </Grid>
 
         {/* 安全设置 */}
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6}>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -233,7 +233,7 @@ const SystemSettings: React.FC = () => {
         </Grid>
 
         {/* 保存按钮 */}
-        <Grid item xs={12}>
+        <Grid xs={12}>
           <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant="contained"

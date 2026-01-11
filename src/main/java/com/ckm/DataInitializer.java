@@ -4,6 +4,7 @@ import com.ckm.entity.*;
 import com.ckm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -37,8 +38,15 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private FranchiseRepository franchiseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
+        initializeUsers();
         initializeProductionStandards();
         initializeQualityTraces();
         initializeSuppliers();
@@ -510,6 +518,25 @@ public class DataInitializer implements CommandLineRunner {
                 productionStepRepository.save(step);
             }
             System.out.println("✅ 生产步骤数据初始化完成");
+        }
+    }
+
+    private void initializeUsers() {
+        if (userRepository.count() == 0) {
+            User[] users = {
+                new User("admin", passwordEncoder.encode("admin123"), "admin@ckm.com", "ADMIN"),
+                new User("manager", passwordEncoder.encode("manager123"), "manager@ckm.com", "MANAGER"),
+                new User("staff", passwordEncoder.encode("staff123"), "staff@ckm.com", "STAFF")
+            };
+
+            for (User user : users) {
+                userRepository.save(user);
+            }
+            System.out.println("✅ 用户数据初始化完成");
+            System.out.println("🔐 默认用户:");
+            System.out.println("   管理员: admin / admin123");
+            System.out.println("   经理: manager / manager123");
+            System.out.println("   员工: staff / staff123");
         }
     }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -11,9 +12,9 @@ import {
   Alert,
   Button,
   IconButton,
-  Tooltip
+  Tooltip,
+  Grid
 } from '@mui/material';
-import Grid from '@mui/material/Grid';
 import {
   TrendingUp,
   TrendingDown,
@@ -27,7 +28,17 @@ import {
   Science,
   Business,
   Visibility,
-  Kitchen
+  Kitchen,
+  Add,
+  Edit,
+  Search,
+  Report,
+  Settings,
+  Schedule,
+  Assignment,
+  LocalShipping,
+  FactCheck,
+  NotificationsActive
 } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
 import { ApiService } from '../../services/api';

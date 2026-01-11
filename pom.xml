@@ -112,13 +112,13 @@
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>5.0.0:jakarta</version>
+            <version>5.0.0</version>
             <classifier>jakarta</classifier>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>5.0.0:jakarta</version>
+            <version>5.0.0</version>
             <classifier>jakarta</classifier>
             <scope>provided</scope>
         </dependency>
@@ -153,11 +153,7 @@
             <version>2.1.0</version>
         </dependency>
 
-        <!-- Validation -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
+
 
         <!-- AOP -->
         <dependency>

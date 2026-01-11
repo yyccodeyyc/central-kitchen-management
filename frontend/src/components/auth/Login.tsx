@@ -8,9 +8,6 @@ import {
   Box,
   Alert,
   Avatar,
-  Grid,
-  Card,
-  CardContent,
   Chip,
   Divider
 } from '@mui/material';
@@ -156,28 +153,26 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       }}
     >
       <Container maxWidth="lg">
-        <Grid container spacing={4} alignItems="center">
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, alignItems: 'center' }}>
           {/* 左侧：系统介绍 */}
-          <Grid xs={12} md={6}>
-            <Box sx={{ textAlign: { xs: 'center', md: 'left' }, color: 'white' }}>
-              <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
-                🍽️ 中央厨房管理系统
-              </Typography>
-              <Typography variant="h5" sx={{ mb: 3, opacity: 0.9 }}>
-                智能化厨房运营，精准管理每一道工序
-              </Typography>
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: { xs: 'center', md: 'flex-start' } }}>
-                <Chip label="生产管理" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
-                <Chip label="质量追溯" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
-                <Chip label="库存监控" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
-                <Chip label="供应商协同" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
-                <Chip label="数据分析" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
-              </Box>
+          <Box sx={{ flex: 1, textAlign: { xs: 'center', md: 'left' }, color: 'white' }}>
+            <Typography variant="h2" gutterBottom sx={{ fontWeight: 800 }}>
+              🍽️ 中央厨房管理系统
+            </Typography>
+            <Typography variant="h5" sx={{ mb: 3, opacity: 0.9 }}>
+              智能化厨房运营，精准管理每一道工序
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: { xs: 'center', md: 'flex-start' } }}>
+              <Chip label="生产管理" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="质量追溯" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="库存监控" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="供应商协同" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
+              <Chip label="数据分析" sx={{ bgcolor: 'rgba(255,255,255,0.2)', color: 'white' }} />
             </Box>
-          </Grid>
+          </Box>
 
           {/* 右侧：登录表单 */}
-          <Grid xs={12} md={6}>
+          <Box sx={{ flex: 1, width: '100%', maxWidth: 480 }}>
             <Paper
               elevation={24}
               sx={{
@@ -280,8 +275,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
                 </Typography>
               </Box>
             </Paper>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
     </Box>
   );

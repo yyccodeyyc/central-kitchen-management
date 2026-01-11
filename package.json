@@ -1,0 +1,21 @@
+{
+  "name": "central-kitchen-management",
+  "version": "1.0.0",
+  "description": "这是一个基于Spring Boot的中央厨房餐饮加盟管理系统，实现中央厨房模式的核心业务流程，包括库存管理、生产计划、门店运营、订单处理等功能。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yyccodeyyc/central-kitchen-management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/yyccodeyyc/central-kitchen-management/issues"
+  },
+  "homepage": "https://github.com/yyccodeyyc/central-kitchen-management#readme"
+}

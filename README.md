@@ -70,19 +70,23 @@
 - 库存智能预警
 - 需求预测分析
 
-## 快速开始
+## 🚀 快速开始
 
-### 1. 环境要求
+### 后端环境要求
 - JDK 17+
 - MySQL 8.0+
 - Maven 3.6+
 
-### 2. 数据库配置
+### 前端环境要求
+- Node.js 16+
+- npm 或 yarn
+
+### 1. 数据库配置
 ```sql
 CREATE DATABASE ckm_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-### 3. 应用配置
+### 2. 后端配置
 修改 `src/main/resources/application.yml` 中的数据库连接信息：
 ```yaml
 spring:
@@ -91,13 +95,23 @@ spring:
     password: your_password
 ```
 
-### 4. 运行应用
+### 3. 启动后端服务
 ```bash
+# 后端启动
 mvn spring-boot:run
 ```
 
+### 4. 启动前端服务
+```bash
+# 前端启动
+cd frontend
+npm install
+npm start
+```
+
 ### 5. 访问应用
-- 主页: http://localhost:8080
+- 后端API: http://localhost:8080
+- 前端仪表板: http://localhost:3000
 - 默认管理员账户: `admin` / `admin123`
 
 ## API文档

@@ -1,0 +1,148 @@
+# 中央厨房餐饮加盟管理系统
+
+## 项目简介
+
+这是一个基于Spring Boot的中央厨房餐饮加盟管理系统，实现中央厨房模式的核心业务流程，包括库存管理、生产计划、门店运营、订单处理等功能。
+
+## 技术栈
+
+- **后端**: Spring Boot 3.2.0 + Java 17
+- **数据库**: MySQL 8.0
+- **安全**: Spring Security + JWT
+- **前端**: Thymeleaf + Bootstrap 5
+- **构建**: Maven
+
+## 功能模块
+
+### ✅ 已实现功能
+
+#### 1. 用户管理系统
+- 用户注册登录
+- 角色权限管理 (管理员、加盟商、店长、厨房管理员)
+- JWT身份认证
+
+#### 2. 中央厨房管理
+- 📦 库存管理 (入库、出库、库存预警)
+- 🏭 生产计划管理 (计划制定、生产跟踪、效率分析)
+- 📊 统计报表 (库存价值、生产效率)
+
+#### 3. 加盟门店管理
+- 门店信息管理
+- 运营状态监控
+- 加盟商管理
+
+#### 4. 订单管理系统
+- 订单创建与跟踪
+- 配送管理
+- 客户服务
+
+#### 5. 产品管理
+- 产品信息维护
+- 价格管理
+- 分类管理
+
+## 快速开始
+
+### 1. 环境要求
+- JDK 17+
+- MySQL 8.0+
+- Maven 3.6+
+
+### 2. 数据库配置
+```sql
+CREATE DATABASE ckm_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 3. 应用配置
+修改 `src/main/resources/application.yml` 中的数据库连接信息：
+```yaml
+spring:
+  datasource:
+    username: your_username
+    password: your_password
+```
+
+### 4. 运行应用
+```bash
+mvn spring-boot:run
+```
+
+### 5. 访问应用
+- 主页: http://localhost:8080
+- 默认管理员账户: `admin` / `admin123`
+
+## API文档
+
+### 认证接口
+```
+POST /api/auth/login    # 用户登录
+POST /api/auth/register # 用户注册
+```
+
+### 厨房管理接口
+```
+GET  /api/kitchen/inventory              # 获取库存列表
+GET  /api/kitchen/production-plans       # 获取生产计划
+POST /api/kitchen/production-plans       # 创建生产计划
+```
+
+### 门店管理接口
+```
+GET  /api/store                         # 获取门店列表
+POST /api/store                         # 创建门店
+```
+
+## 项目结构
+
+```
+central-kitchen-management/
+├── src/main/java/com/ckm/
+│   ├── CentralKitchenManagementApplication.java
+│   ├── config/                          # 配置类
+│   ├── controller/                      # 控制器层
+│   ├── entity/                          # 实体类
+│   ├── repository/                      # 数据访问层
+│   ├── service/                         # 业务逻辑层
+│   └── security/                        # 安全相关
+├── src/main/resources/
+│   ├── application.yml                  # 应用配置
+│   └── templates/                       # Thymeleaf模板
+└── pom.xml                             # Maven配置
+```
+
+## 核心业务流程
+
+### 中央厨房运营流程
+1. **产品管理**: 定义菜品信息、价格、制作标准
+2. **库存管理**: 监控原材料库存，及时补货
+3. **生产计划**: 根据订单需求制定生产计划
+4. **质量控制**: 生产过程质量检查
+5. **配送管理**: 成品配送到各加盟门店
+
+### 加盟门店运营流程
+1. **订单接收**: 接收客户订单
+2. **厨房备货**: 从中央厨房获取成品
+3. **门店销售**: 向客户提供服务
+4. **数据上报**: 上报销售数据和运营情况
+
+## 部署说明
+
+### 开发环境
+```bash
+mvn clean compile
+mvn spring-boot:run
+```
+
+### 生产环境
+```bash
+mvn clean package -DskipTests
+java -jar target/central-kitchen-management-0.0.1-SNAPSHOT.jar
+```
+
+## 联系方式
+
+如有问题或建议，请联系开发团队。
+
+---
+
+**注意**: 这是一个演示版本，实际部署时请根据生产环境要求进行安全配置和性能优化。

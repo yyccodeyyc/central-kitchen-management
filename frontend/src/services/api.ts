@@ -4,6 +4,8 @@ import {
   AlertData,
   KPI,
   ProductionStandard,
+  QualityTrace,
+  Supplier,
   ApiResponse
 } from '../types';
 
@@ -119,6 +121,87 @@ export class ApiService {
 
   static async deleteProductionStandard(id: number): Promise<void> {
     await api.delete(`/api/production-standards/${id}`);
+  }
+
+  // 质量追溯管理
+  static async getQualityTraces(): Promise<QualityTrace[]> {
+    const response = await api.get('/api/quality-traces');
+    return response.data;
+  }
+
+  static async getQualityTrace(id: number): Promise<QualityTrace> {
+    const response = await api.get(`/api/quality-traces/${id}`);
+    return response.data;
+  }
+
+  static async createQualityTrace(data: Partial<QualityTrace>): Promise<QualityTrace> {
+    const response = await api.post('/api/quality-traces', data);
+    return response.data;
+  }
+
+  static async updateQualityTrace(id: number, data: Partial<QualityTrace>): Promise<QualityTrace> {
+    const response = await api.put(`/api/quality-traces/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteQualityTrace(id: number): Promise<void> {
+    await api.delete(`/api/quality-traces/${id}`);
+  }
+
+  static async getExpiringSoonTraces(): Promise<QualityTrace[]> {
+    const response = await api.get('/api/quality-traces/expiring-soon');
+    return response.data;
+  }
+
+  static async performInspection(id: number, inspector: string, result: string, notes?: string): Promise<QualityTrace> {
+    const response = await api.post(`/api/quality-traces/${id}/inspect`, null, {
+      params: { inspector, result, notes }
+    });
+    return response.data;
+  }
+
+  // 供应商管理
+  static async getSuppliers(): Promise<Supplier[]> {
+    const response = await api.get('/api/suppliers');
+    return response.data;
+  }
+
+  static async getSupplier(id: number): Promise<Supplier> {
+    const response = await api.get(`/api/suppliers/${id}`);
+    return response.data;
+  }
+
+  static async createSupplier(data: Partial<Supplier>): Promise<Supplier> {
+    const response = await api.post('/api/suppliers', data);
+    return response.data;
+  }
+
+  static async updateSupplier(id: number, data: Partial<Supplier>): Promise<Supplier> {
+    const response = await api.put(`/api/suppliers/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteSupplier(id: number): Promise<void> {
+    await api.delete(`/api/suppliers/${id}`);
+  }
+
+  static async getActiveSuppliers(): Promise<Supplier[]> {
+    const response = await api.get('/api/suppliers/active');
+    return response.data;
+  }
+
+  static async updateSupplierRating(id: number, rating: number): Promise<Supplier> {
+    const response = await api.post(`/api/suppliers/${id}/rate`, null, {
+      params: { rating }
+    });
+    return response.data;
+  }
+
+  static async updateSupplierStatus(id: number, status: string): Promise<Supplier> {
+    const response = await api.post(`/api/suppliers/${id}/status`, null, {
+      params: { status }
+    });
+    return response.data;
   }
 
   // 手动触发检查

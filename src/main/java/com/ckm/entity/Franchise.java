@@ -1,4 +1,4 @@
-package main.java.com.ckm.entity;
+package com.ckm.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

@@ -22,15 +22,22 @@ import {
   Refresh,
   Assessment,
   Inventory,
-  People
+  People,
+  Engineering,
+  Science,
+  Business,
+  Visibility,
+  Kitchen
 } from '@mui/icons-material';
+import { useAuth } from '../../contexts/AuthContext';
 import { ApiService } from '../../services/api';
-import { DashboardData, KPI, AlertData } from '../../types';
+import { DashboardData, KPI, AlertData, UserRole } from '../../types';
 import LineChart from '../charts/LineChart';
 import BarChart from '../charts/BarChart';
 import PieChart from '../charts/PieChart';
 
 const Dashboard: React.FC = () => {
+  const { user } = useAuth();
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [kpis, setKpis] = useState<KPI | null>(null);
   const [alerts, setAlerts] = useState<AlertData | null>(null);
@@ -141,25 +148,70 @@ const Dashboard: React.FC = () => {
     );
   }
 
+  // 根据角色获取专属的仪表板配置
+  const getRoleDashboardConfig = () => {
+    switch (user?.role) {
+      case 'ADMIN':
+        return {
+          title: '系统总览仪表板',
+          subtitle: '全系统运营监控与管理',
+          focus: '系统整体运营状态'
+        };
+      case 'PRODUCTION_MANAGER':
+        return {
+          title: '生产仪表板',
+          subtitle: '生产流程监控与优化',
+          focus: '生产效率和质量控制'
+        };
+      case 'QUALITY_INSPECTOR':
+        return {
+          title: '质量仪表板',
+          subtitle: '质量检测与追溯管理',
+          focus: '质量检测和问题追踪'
+        };
+      case 'INVENTORY_MANAGER':
+        return {
+          title: '库存仪表板',
+          subtitle: '库存管理与物料监控',
+          focus: '库存水平和物料管理'
+        };
+      case 'SUPPLIER_REPRESENTATIVE':
+        return {
+          title: '供应商仪表板',
+          subtitle: '供应商管理与合作监控',
+          focus: '供应商绩效和质量反馈'
+        };
+      case 'VIEWER':
+      default:
+        return {
+          title: '数据概览',
+          subtitle: '系统运行状态监控',
+          focus: '整体系统状态查看'
+        };
+    }
+  };
+
+  const config = getRoleDashboardConfig();
+
   // 模拟图表数据
   const costTrendData = {
     xAxis: ['1月', '2月', '3月', '4月', '5月', '6月'],
     series: [{
-      name: '成本趋势',
+      name: '趋势数据',
       data: [12500, 12200, 12800, 12100, 11900, 12500],
       type: 'line' as const
     }]
   };
 
   const qualityIssueData = [
-    { name: '合格', value: 965 },
-    { name: '不合格', value: 35 }
+    { name: '正常', value: 965 },
+    { name: '异常', value: 35 }
   ];
 
   const storeRankingData = {
-    xAxis: ['门店A', '门店B', '门店C', '门店D', '门店E'],
+    xAxis: ['部门A', '部门B', '部门C', '部门D', '部门E'],
     series: [{
-      name: '销售额',
+      name: '绩效指标',
       data: [45000, 38000, 42000, 35000, 32000],
       type: 'bar' as const
     }]
@@ -167,7 +219,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      {/* 欢迎头部 */}
+      {/* 角色专属欢迎头部 */}
       <Box sx={{
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
         color: 'white',
@@ -177,16 +229,18 @@ const Dashboard: React.FC = () => {
         textAlign: 'center'
       }}>
         <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
-          🍽️ 中央厨房管理系统
+          🍽️ {config.title}
         </Typography>
         <Typography variant="h6" sx={{ opacity: 0.9, mb: 3 }}>
-          现代化企业级厨房运营解决方案
+          {config.subtitle}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
-          <Chip label="实时监控" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
-          <Chip label="智能预警" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
-          <Chip label="数据分析" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
-          <Chip label="质量追溯" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
+          <Chip
+            label={config.focus}
+            color="primary"
+            variant="outlined"
+            sx={{ color: 'white', borderColor: 'white', fontSize: '1rem', py: 1 }}
+          />
         </Box>
       </Box>
 

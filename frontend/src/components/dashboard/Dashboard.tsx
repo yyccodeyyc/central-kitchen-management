@@ -11,9 +11,9 @@ import {
   Alert,
   Button,
   IconButton,
-  Tooltip,
-  Grid
+  Tooltip
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import {
   TrendingUp,
   TrendingDown,
@@ -166,135 +166,300 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* 头部标题栏 */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
-          🏭 中央厨房管理系统仪表板
+    <Box sx={{ flexGrow: 1 }}>
+      {/* 欢迎头部 */}
+      <Box sx={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        p: 4,
+        borderRadius: 3,
+        mb: 4,
+        textAlign: 'center'
+      }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>
+          🍽️ 中央厨房管理系统
         </Typography>
-        <Box>
-          <Tooltip title="手动库存检查">
-            <IconButton onClick={handleInventoryCheck} sx={{ mr: 1 }}>
-              <Inventory />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="手动质量检查">
-            <IconButton onClick={handleQualityCheck} sx={{ mr: 1 }}>
-              <CheckCircle />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="刷新数据">
-            <IconButton onClick={handleRefresh}>
-              <Refresh />
-            </IconButton>
-          </Tooltip>
+        <Typography variant="h6" sx={{ opacity: 0.9, mb: 3 }}>
+          现代化企业级厨房运营解决方案
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, flexWrap: 'wrap' }}>
+          <Chip label="实时监控" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
+          <Chip label="智能预警" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
+          <Chip label="数据分析" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
+          <Chip label="质量追溯" color="primary" variant="outlined" sx={{ color: 'white', borderColor: 'white' }} />
         </Box>
       </Box>
 
       {/* KPI 卡片 */}
       {kpis && (
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ bgcolor: '#e3f2fd', border: '1px solid #bbdefb', borderRadius: 2 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Assessment sx={{ color: '#1976d2', mr: 1 }} />
-                  <Typography variant="h6" color="primary">
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'text.primary' }}>
+            📊 关键指标
+          </Typography>
+          <Box sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: '1fr',
+              sm: 'repeat(2, 1fr)',
+              md: 'repeat(4, 1fr)'
+            },
+            gap: 3
+          }}>
+            <Card sx={{
+              bgcolor: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+              border: '1px solid #90caf9',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 100,
+                height: 100,
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                transform: 'translate(30px, -30px)'
+              }
+            }}>
+              <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <Assessment sx={{ color: '#1976d2', mr: 1, fontSize: 28 }} />
+                  <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
                     生产效率
                   </Typography>
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#1976d2' }}>
+                <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#1976d2', mb: 1 }}>
                   {kpis.productionEfficiency.toFixed(1)}%
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <TrendingUp sx={{ color: 'success.main', fontSize: 16, mr: 0.5 }} />
-                  <Typography variant="body2" color="success.main">
-                    目标: >85%
+                  <Typography variant="body2" color="success.main" sx={{ fontWeight: 'medium' }}>
+                    目标: 85%
                   </Typography>
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ bgcolor: '#f3e5f5', border: '1px solid #ce93d8', borderRadius: 2 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <CheckCircle sx={{ color: '#7b1fa2', mr: 1 }} />
-                  <Typography variant="h6" sx={{ color: '#7b1fa2' }}>
+            <Card sx={{
+              bgcolor: 'linear-gradient(135deg, #f3e5f5 0%, #ce93d8 100%)',
+              border: '1px solid #ba68c8',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 100,
+                height: 100,
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                transform: 'translate(30px, -30px)'
+              }
+            }}>
+              <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <CheckCircle sx={{ color: '#7b1fa2', mr: 1, fontSize: 28 }} />
+                  <Typography variant="h6" sx={{ color: '#7b1fa2', fontWeight: 'bold' }}>
                     质量合格率
                   </Typography>
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#7b1fa2' }}>
+                <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#7b1fa2', mb: 1 }}>
                   {kpis.qualityPassRate.toFixed(1)}%
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <TrendingUp sx={{ color: 'success.main', fontSize: 16, mr: 0.5 }} />
-                  <Typography variant="body2" color="success.main">
-                    目标: >95%
+                  <Typography variant="body2" color="success.main" sx={{ fontWeight: 'medium' }}>
+                    目标: 95%
                   </Typography>
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ bgcolor: '#fff3e0', border: '1px solid #ffcc02', borderRadius: 2 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <TrendingUp sx={{ color: '#f57c00', mr: 1 }} />
-                  <Typography variant="h6" sx={{ color: '#f57c00' }}>
+            <Card sx={{
+              bgcolor: 'linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%)',
+              border: '1px solid #ffb74d',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 100,
+                height: 100,
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                transform: 'translate(30px, -30px)'
+              }
+            }}>
+              <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <TrendingUp sx={{ color: '#f57c00', mr: 1, fontSize: 28 }} />
+                  <Typography variant="h6" sx={{ color: '#f57c00', fontWeight: 'bold' }}>
                     单位成本
                   </Typography>
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#f57c00' }}>
+                <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#f57c00', mb: 1 }}>
                   ¥{kpis.costPerUnit.toFixed(2)}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <TrendingDown sx={{ color: 'success.main', fontSize: 16, mr: 0.5 }} />
-                  <Typography variant="body2" color="success.main" dangerouslySetInnerHTML={{ __html: '目标: <¥12.00' }} />
+                  <Typography variant="body2" color="success.main" sx={{ fontWeight: 'medium' }}>
+                    目标: ¥12.00
+                  </Typography>
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ bgcolor: '#e8f5e8', border: '1px solid #81c784', borderRadius: 2 }}>
-              <CardContent>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <People sx={{ color: '#388e3c', mr: 1 }} />
-                  <Typography variant="h6" sx={{ color: '#388e3c' }}>
+            <Card sx={{
+              bgcolor: 'linear-gradient(135deg, #e8f5e8 0%, #81c784 100%)',
+              border: '1px solid #66bb6a',
+              position: 'relative',
+              overflow: 'hidden',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: 100,
+                height: 100,
+                background: 'rgba(255, 255, 255, 0.1)',
+                borderRadius: '50%',
+                transform: 'translate(30px, -30px)'
+              }
+            }}>
+              <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                  <People sx={{ color: '#388e3c', mr: 1, fontSize: 28 }} />
+                  <Typography variant="h6" sx={{ color: '#388e3c', fontWeight: 'bold' }}>
                     客户满意度
                   </Typography>
                 </Box>
-                <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#388e3c' }}>
+                <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#388e3c', mb: 1 }}>
                   {kpis.customerSatisfaction.toFixed(1)}分
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                   <TrendingUp sx={{ color: 'success.main', fontSize: 16, mr: 0.5 }} />
-                  <Typography variant="body2" color="success.main">
-                    目标: >4.5分
+                  <Typography variant="body2" color="success.main" sx={{ fontWeight: 'medium' }}>
+                    目标: 4.5分
                   </Typography>
                 </Box>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       )}
+
+      {/* 操作面板 */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'text.primary' }}>
+          🛠️ 系统操作
+        </Typography>
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(4, 1fr)'
+          },
+          gap: 2
+        }}>
+          <Button
+            variant="contained"
+            startIcon={<Refresh />}
+            onClick={handleRefresh}
+            sx={{
+              py: 2,
+              borderRadius: 2,
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              '&:hover': {
+                background: 'linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%)'
+              }
+            }}
+          >
+            刷新数据
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<Inventory />}
+            onClick={handleInventoryCheck}
+            sx={{
+              py: 2,
+              borderRadius: 2,
+              borderColor: 'primary.main',
+              color: 'primary.main',
+              '&:hover': {
+                borderColor: 'primary.dark',
+                backgroundColor: 'primary.light',
+                color: 'primary.dark'
+              }
+            }}
+          >
+            库存检查
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<CheckCircle />}
+            onClick={handleQualityCheck}
+            sx={{
+              py: 2,
+              borderRadius: 2,
+              borderColor: 'secondary.main',
+              color: 'secondary.main',
+              '&:hover': {
+                borderColor: 'secondary.dark',
+                backgroundColor: 'secondary.light',
+                color: 'secondary.dark'
+              }
+            }}
+          >
+            质量检查
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<Assessment />}
+            sx={{
+              py: 2,
+              borderRadius: 2,
+              borderColor: 'success.main',
+              color: 'success.main',
+              '&:hover': {
+                borderColor: 'success.dark',
+                backgroundColor: 'success.light',
+                color: 'success.dark'
+              }
+            }}
+          >
+            生成报告
+          </Button>
+        </Box>
+      </Box>
 
       {/* 预警信息 */}
       {alerts && (alerts.inventoryAlerts.totalAlerts > 0 || alerts.qualityAlerts.totalQualityAlerts > 0) && (
-        <Alert severity="warning" sx={{ mb: 3, borderRadius: 2 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 'bold', mb: 1 }}>
-            ⚠️ 系统预警
+        <Alert
+          severity="warning"
+          sx={{
+            mb: 4,
+            borderRadius: 3,
+            border: '1px solid #ff9800',
+            background: 'linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%)'
+          }}
+          icon={<Warning sx={{ fontSize: 28 }} />}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
+            ⚠️ 系统预警通知
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             {alerts.inventoryAlerts.totalAlerts > 0 && (
               <Chip
-                icon={<Warning />}
+                icon={<Inventory />}
                 label={`库存预警: ${alerts.inventoryAlerts.totalAlerts}项`}
                 color="warning"
-                size="small"
+                size="medium"
+                sx={{ fontWeight: 'medium' }}
               />
             )}
             {alerts.qualityAlerts.totalQualityAlerts > 0 && (
@@ -302,94 +467,207 @@ const Dashboard: React.FC = () => {
                 icon={<Warning />}
                 label={`质量问题: ${alerts.qualityAlerts.totalQualityAlerts}项`}
                 color="error"
-                size="small"
+                size="medium"
+                sx={{ fontWeight: 'medium' }}
               />
             )}
           </Box>
         </Alert>
       )}
 
-      {/* 图表区域 */}
-      <Grid container spacing={3}>
-        {/* 成本趋势图 */}
-        <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, height: '450px', borderRadius: 2 }}>
+      {/* 数据可视化区域 */}
+      <Box sx={{ mb: 4 }}>
+        <Typography variant="h5" sx={{ mb: 3, fontWeight: 'bold', color: 'text.primary' }}>
+          📈 数据分析
+        </Typography>
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            lg: '2fr 1fr'
+          },
+          gap: 3
+        }}>
+          {/* 成本趋势图 */}
+          <Paper sx={{
+            p: 3,
+            borderRadius: 3,
+            height: '500px',
+            background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+            border: '1px solid #e2e8f0'
+          }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
+              💰 成本趋势分析
+            </Typography>
             <LineChart
               data={costTrendData}
-              title="💰 成本趋势分析 (最近6个月)"
-              height="380px"
+              title=""
+              height="400px"
             />
           </Paper>
-        </Grid>
 
-        {/* 质量问题分布 */}
-        <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3, height: '450px', borderRadius: 2 }}>
+          {/* 质量分布饼图 */}
+          <Paper sx={{
+            p: 3,
+            borderRadius: 3,
+            height: '500px',
+            background: 'linear-gradient(135deg, #fef7ed 0%, #fed7aa 100%)',
+            border: '1px solid #fdba74'
+          }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
+              ✅ 质量合格率分布
+            </Typography>
             <PieChart
               data={qualityIssueData}
-              title="✅ 质量合格率分布"
-              height="380px"
+              title=""
+              height="400px"
               donut={true}
             />
           </Paper>
-        </Grid>
+        </Box>
+      </Box>
 
+      {/* 门店绩效和产能利用率 */}
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          xs: '1fr',
+          md: '1fr 1fr'
+        },
+        gap: 3,
+        mb: 4
+      }}>
         {/* 门店销售排名 */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, height: '450px', borderRadius: 2 }}>
-            <BarChart
-              data={storeRankingData}
-              title="🏪 门店销售排名 (本月)"
-              height="380px"
-              horizontal={true}
-            />
-          </Paper>
-        </Grid>
+        <Paper sx={{
+          p: 3,
+          borderRadius: 3,
+          height: '450px',
+          background: 'linear-gradient(135deg, #f0f9ff 0%, #bae6fd 100%)',
+          border: '1px solid #7dd3fc'
+        }}>
+          <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
+            🏪 门店销售排名
+          </Typography>
+          <BarChart
+            data={storeRankingData}
+            title=""
+            height="360px"
+            horizontal={true}
+          />
+        </Paper>
 
         {/* 产能利用率 */}
-        <Grid item xs={12} md={6}>
-          <Paper sx={{ p: 3, borderRadius: 2 }}>
-            <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold' }}>
-              ⚡ 产能利用率
-            </Typography>
-            <Box sx={{ mb: 3 }}>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                今日目标: 1,000 份
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                实际完成: 890 份
-              </Typography>
+        <Paper sx={{
+          p: 3,
+          borderRadius: 3,
+          background: 'linear-gradient(135deg, #f0fdf4 0%, #bbf7d0 100%)',
+          border: '1px solid #86efac'
+        }}>
+          <Typography variant="h6" sx={{ mb: 3, fontWeight: 'bold', color: 'text.primary' }}>
+            ⚡ 产能利用率
+          </Typography>
+          <Box sx={{ mb: 4 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
               <Typography variant="body2" color="text.secondary">
-                完成率: 89.0%
+                今日目标
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                1,000 份
               </Typography>
             </Box>
-            <LinearProgress
-              variant="determinate"
-              value={89.0}
-              sx={{
-                height: 12,
-                borderRadius: 6,
-                bgcolor: '#e0e0e0',
-                '& .MuiLinearProgress-bar': {
-                  bgcolor: '#4caf50',
-                  borderRadius: 6
-                }
-              }}
-            />
-            <Typography variant="body2" sx={{ mt: 2, textAlign: 'center', fontWeight: 'bold' }}>
-              89.0% 产能利用率
-            </Typography>
-          </Paper>
-        </Grid>
-      </Grid>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                实际完成
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                890 份
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                完成率
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'success.main' }}>
+                89.0%
+              </Typography>
+            </Box>
+          </Box>
+          <LinearProgress
+            variant="determinate"
+            value={89.0}
+            sx={{
+              height: 16,
+              borderRadius: 8,
+              bgcolor: '#dcfce7',
+              '& .MuiLinearProgress-bar': {
+                bgcolor: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                borderRadius: 8
+              }
+            }}
+          />
+          <Typography variant="h4" sx={{ mt: 3, textAlign: 'center', fontWeight: 'bold', color: 'success.main' }}>
+            89.0%
+          </Typography>
+          <Typography variant="body2" sx={{ textAlign: 'center', color: 'text.secondary', mt: 1 }}>
+            产能利用率
+          </Typography>
+        </Paper>
+      </Box>
 
-      {/* 底部信息 */}
-      <Box sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography variant="body2" color="text.secondary">
-          🚀 学习老乡鸡和蜜雪冰城的最佳实践 - 打造中国版中央厨房连锁品牌
+      {/* 系统状态信息 */}
+      <Box sx={{
+        p: 3,
+        borderRadius: 3,
+        background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%)',
+        border: '1px solid #e2e8f0',
+        textAlign: 'center'
+      }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: 'text.primary' }}>
+          🔄 系统运行状态
+        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 4, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{
+              width: 12,
+              height: 12,
+              borderRadius: '50%',
+              bgcolor: 'success.main',
+              animation: 'pulse 2s infinite'
+            }} />
+            <Typography variant="body2" color="text.secondary">
+              后端服务正常
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{
+              width: 12,
+              height: 12,
+              borderRadius: '50%',
+              bgcolor: 'primary.main',
+              animation: 'pulse 2s infinite'
+            }} />
+            <Typography variant="body2" color="text.secondary">
+              前端服务正常
+            </Typography>
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{
+              width: 12,
+              height: 12,
+              borderRadius: '50%',
+              bgcolor: 'warning.main',
+              animation: 'pulse 2s infinite'
+            }} />
+            <Typography variant="body2" color="text.secondary">
+              数据库连接正常
+            </Typography>
+          </Box>
+        </Box>
+        <Typography variant="body2" sx={{ mt: 2, color: 'text.secondary' }}>
+          最后更新时间: {new Date().toLocaleString('zh-CN')}
         </Typography>
       </Box>
-    </Container>
+    </Box>
   );
 };
 

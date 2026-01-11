@@ -6,7 +6,10 @@ import {
   ProductionStandard,
   QualityTrace,
   Supplier,
-  ApiResponse
+  ApiResponse,
+  ProductionOrder,
+  ProductionSchedule,
+  ProductionStats
 } from '../types';
 
 // 创建axios实例
@@ -225,6 +228,130 @@ export class ApiService {
   static async getTrends(period: string) {
     const response = await api.get(`/api/analytics/trends/${period}`);
     return response.data;
+  }
+
+  // ================ 生产管理API ================
+
+  // 生产订单管理
+  static async getProductionOrders(): Promise<ProductionOrder[]> {
+    const response = await api.get('/api/production/orders');
+    return response.data;
+  }
+
+  static async getProductionOrder(id: number): Promise<ProductionOrder> {
+    const response = await api.get(`/api/production/orders/${id}`);
+    return response.data;
+  }
+
+  static async createProductionOrder(data: Partial<ProductionOrder>): Promise<ProductionOrder> {
+    const response = await api.post('/api/production/orders', data);
+    return response.data;
+  }
+
+  static async updateProductionOrder(id: number, data: Partial<ProductionOrder>): Promise<ProductionOrder> {
+    const response = await api.put(`/api/production/orders/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteProductionOrder(id: number): Promise<void> {
+    await api.delete(`/api/production/orders/${id}`);
+  }
+
+  static async getPendingOrders(): Promise<ProductionOrder[]> {
+    const response = await api.get('/api/production/orders/pending');
+    return response.data;
+  }
+
+  static async approveOrder(id: number, approvedBy: string): Promise<ProductionOrder> {
+    const response = await api.post(`/api/production/orders/${id}/approve`, null, {
+      params: { approvedBy }
+    });
+    return response.data;
+  }
+
+  static async scheduleOrder(id: number, scheduledDate: string, scheduledBy: string): Promise<ProductionOrder> {
+    const response = await api.post(`/api/production/orders/${id}/schedule`, { scheduledDate }, {
+      params: { scheduledBy }
+    });
+    return response.data;
+  }
+
+  static async completeOrder(id: number, completedBy: string): Promise<ProductionOrder> {
+    const response = await api.post(`/api/production/orders/${id}/complete`, null, {
+      params: { completedBy }
+    });
+    return response.data;
+  }
+
+  // 生产排程管理
+  static async getProductionSchedules(): Promise<ProductionSchedule[]> {
+    const response = await api.get('/api/production/schedules');
+    return response.data;
+  }
+
+  static async getProductionSchedule(id: number): Promise<ProductionSchedule> {
+    const response = await api.get(`/api/production/schedules/${id}`);
+    return response.data;
+  }
+
+  static async createProductionSchedule(data: Partial<ProductionSchedule>): Promise<ProductionSchedule> {
+    const response = await api.post('/api/production/schedules', data);
+    return response.data;
+  }
+
+  static async updateProductionSchedule(id: number, data: Partial<ProductionSchedule>): Promise<ProductionSchedule> {
+    const response = await api.put(`/api/production/schedules/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteProductionSchedule(id: number): Promise<void> {
+    await api.delete(`/api/production/schedules/${id}`);
+  }
+
+  static async getSchedulesByDate(date: string): Promise<ProductionSchedule[]> {
+    const response = await api.get(`/api/production/schedules/date/${date}`);
+    return response.data;
+  }
+
+  static async confirmSchedule(id: number, confirmedBy: string): Promise<ProductionSchedule> {
+    const response = await api.post(`/api/production/schedules/${id}/confirm`, null, {
+      params: { confirmedBy }
+    });
+    return response.data;
+  }
+
+  static async startSchedule(id: number, startedBy: string): Promise<ProductionSchedule> {
+    const response = await api.post(`/api/production/schedules/${id}/start`, null, {
+      params: { startedBy }
+    });
+    return response.data;
+  }
+
+  static async completeSchedule(id: number, completedBy: string): Promise<ProductionSchedule> {
+    const response = await api.post(`/api/production/schedules/${id}/complete`, null, {
+      params: { completedBy }
+    });
+    return response.data;
+  }
+
+  // 生产统计
+  static async getProductionStats(startDate: string, endDate: string): Promise<ProductionStats> {
+    const response = await api.get('/api/production/stats/orders', {
+      params: { startDate, endDate }
+    });
+    const orderStats = response.data;
+
+    const scheduleResponse = await api.get('/api/production/stats/schedules', {
+      params: { startDate, endDate }
+    });
+    const scheduleStats = scheduleResponse.data;
+
+    return {
+      orderStats,
+      scheduleStats,
+      batchStats: { totalBatches: 0, completedBatches: 0, averageYieldRate: 0 },
+      stepStats: { totalSteps: 0, completedSteps: 0, qualityPassRate: 0 }
+    };
   }
 }
 

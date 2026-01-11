@@ -1,16 +1,14 @@
 package com.ckm;
 
-import com.ckm.entity.ProductionStandard;
-import com.ckm.entity.QualityTrace;
-import com.ckm.entity.Supplier;
-import com.ckm.repository.ProductionStandardRepository;
-import com.ckm.repository.QualityTraceRepository;
-import com.ckm.repository.SupplierRepository;
+import com.ckm.entity.*;
+import com.ckm.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
@@ -24,11 +22,30 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    @Autowired
+    private ProductionOrderRepository productionOrderRepository;
+
+    @Autowired
+    private ProductionScheduleRepository productionScheduleRepository;
+
+    @Autowired
+    private ProductionBatchRepository productionBatchRepository;
+
+    @Autowired
+    private ProductionStepRepository productionStepRepository;
+
+    @Autowired
+    private FranchiseRepository franchiseRepository;
+
     @Override
     public void run(String... args) throws Exception {
         initializeProductionStandards();
         initializeQualityTraces();
         initializeSuppliers();
+        initializeFranchises();
+        initializeProductionOrders();
+        initializeProductionSchedules();
+        initializeProductionBatches();
 
         System.out.println("🎉 数据初始化完成！");
     }
@@ -257,6 +274,242 @@ public class DataInitializer implements CommandLineRunner {
                 supplierRepository.save(supplier);
             }
             System.out.println("✅ 供应商数据初始化完成");
+        }
+    }
+
+    private void initializeFranchises() {
+        if (franchiseRepository.count() == 0) {
+            Franchise[] franchises = {
+                Franchise.builder()
+                    .name("北京朝阳店")
+                    .code("BJCY001")
+                    .address("北京市朝阳区建国路88号")
+                    .contactPerson("李经理")
+                    .contactPhone("13800138007")
+                    .status(Franchise.Status.ACTIVE)
+                    .build(),
+
+                Franchise.builder()
+                    .name("上海浦东店")
+                    .code("SHPD002")
+                    .address("上海市浦东新区陆家嘴金融贸易区")
+                    .contactPerson("王经理")
+                    .contactPhone("13800138008")
+                    .status(Franchise.Status.ACTIVE)
+                    .build(),
+
+                Franchise.builder()
+                    .name("广州天河店")
+                    .code("GZTH003")
+                    .address("广州市天河区珠江新城")
+                    .contactPerson("张经理")
+                    .contactPhone("13800138009")
+                    .status(Franchise.Status.ACTIVE)
+                    .build()
+            };
+
+            for (Franchise franchise : franchises) {
+                franchiseRepository.save(franchise);
+            }
+            System.out.println("✅ 加盟商数据初始化完成");
+        }
+    }
+
+    private void initializeProductionOrders() {
+        if (productionOrderRepository.count() == 0) {
+            // 获取已初始化的数据
+            ProductionStandard gongBaoJiDing = productionStandardRepository.findAll().stream()
+                .filter(ps -> ps.getDishName().equals("宫保鸡丁"))
+                .findFirst().orElse(null);
+
+            ProductionStandard yuXiangRouSi = productionStandardRepository.findAll().stream()
+                .filter(ps -> ps.getDishName().equals("鱼香肉丝"))
+                .findFirst().orElse(null);
+
+            Franchise beijingStore = franchiseRepository.findAll().stream()
+                .filter(f -> f.getCode().equals("BJCY001"))
+                .findFirst().orElse(null);
+
+            Franchise shanghaiStore = franchiseRepository.findAll().stream()
+                .filter(f -> f.getCode().equals("SHPD002"))
+                .findFirst().orElse(null);
+
+            if (gongBaoJiDing != null && yuXiangRouSi != null && beijingStore != null && shanghaiStore != null) {
+                ProductionOrder[] orders = {
+                    ProductionOrder.builder()
+                        .orderNumber("PO20240101001")
+                        .franchise(beijingStore)
+                        .productionStandard(gongBaoJiDing)
+                        .quantity(50)
+                        .unitPrice(15.00)
+                        .priority(ProductionOrder.Priority.NORMAL)
+                        .status(ProductionOrder.OrderStatus.PENDING)
+                        .orderDate(LocalDateTime.now().minusDays(1))
+                        .requiredDate(LocalDateTime.now().plusDays(2))
+                        .specialInstructions("需要额外包装")
+                        .notes("北京朝阳店常规订单")
+                        .createdBy("系统")
+                        .updatedBy("系统")
+                        .build(),
+
+                    ProductionOrder.builder()
+                        .orderNumber("PO20240101002")
+                        .franchise(shanghaiStore)
+                        .productionStandard(yuXiangRouSi)
+                        .quantity(30)
+                        .unitPrice(18.00)
+                        .priority(ProductionOrder.Priority.HIGH)
+                        .status(ProductionOrder.OrderStatus.APPROVED)
+                        .orderDate(LocalDateTime.now().minusHours(12))
+                        .requiredDate(LocalDateTime.now().plusDays(1))
+                        .specialInstructions("VIP客户订单，优先处理")
+                        .notes("上海浦东店紧急订单")
+                        .createdBy("系统")
+                        .updatedBy("系统")
+                        .build()
+                };
+
+                for (ProductionOrder order : orders) {
+                    productionOrderRepository.save(order);
+                }
+                System.out.println("✅ 生产订单数据初始化完成");
+            }
+        }
+    }
+
+    private void initializeProductionSchedules() {
+        if (productionScheduleRepository.count() == 0) {
+            LocalDateTime today = LocalDateTime.now().withHour(9).withMinute(0); // 今天早上9点
+
+            ProductionSchedule[] schedules = {
+                ProductionSchedule.builder()
+                    .scheduleNumber("PS20240101001")
+                    .scheduledDate(today)
+                    .startTime(today)
+                    .endTime(today.plusMinutes(90))
+                    .productionLine("生产线A")
+                    .equipment("多功能炒锅A1")
+                    .assignedStaff("厨师长张三")
+                    .status(ProductionSchedule.ScheduleStatus.PLANNED)
+                    .capacityUtilization(75.0)
+                    .notes("宫保鸡丁生产排程")
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build(),
+
+                ProductionSchedule.builder()
+                    .scheduleNumber("PS20240101002")
+                    .scheduledDate(today.plusHours(2))
+                    .startTime(today.plusHours(2))
+                    .endTime(today.plusHours(2).plusMinutes(60))
+                    .productionLine("生产线B")
+                    .equipment("多功能炒锅B2")
+                    .assignedStaff("厨师李四")
+                    .status(ProductionSchedule.ScheduleStatus.CONFIRMED)
+                    .capacityUtilization(50.0)
+                    .notes("鱼香肉丝生产排程")
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build()
+            };
+
+            for (ProductionSchedule schedule : schedules) {
+                productionScheduleRepository.save(schedule);
+            }
+            System.out.println("✅ 生产排程数据初始化完成");
+        }
+    }
+
+    private void initializeProductionBatches() {
+        if (productionBatchRepository.count() == 0) {
+            // 获取已初始化的数据
+            ProductionOrder order = productionOrderRepository.findAll().stream()
+                .filter(o -> o.getOrderNumber().equals("PO20240101001"))
+                .findFirst().orElse(null);
+
+            ProductionSchedule schedule = productionScheduleRepository.findAll().stream()
+                .filter(s -> s.getScheduleNumber().equals("PS20240101001"))
+                .findFirst().orElse(null);
+
+            if (order != null && schedule != null) {
+                ProductionBatch batch = ProductionBatch.builder()
+                    .batchNumber("PB20240101001")
+                    .productionOrder(order)
+                    .productionSchedule(schedule)
+                    .plannedQuantity(50)
+                    .startTime(LocalDateTime.now().minusHours(2))
+                    .status(ProductionBatch.BatchStatus.IN_PROGRESS)
+                    .materialCost(375.00) // 50 * 7.5
+                    .laborCost(50.00)
+                    .overheadCost(25.00)
+                    .notes("宫保鸡丁第一批生产")
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build();
+
+                productionBatchRepository.save(batch);
+
+                // 初始化生产步骤
+                initializeProductionSteps(batch);
+
+                System.out.println("✅ 生产批次数据初始化完成");
+            }
+        }
+    }
+
+    private void initializeProductionSteps(ProductionBatch batch) {
+        if (productionStepRepository.count() == 0) {
+            ProductionStep[] steps = {
+                ProductionStep.builder()
+                    .productionBatch(batch)
+                    .stepNumber(1)
+                    .stepName("食材准备")
+                    .instructions("称量鸡胸肉300g，花生米50g，青椒100g，胡萝卜50g，准备葱姜蒜")
+                    .plannedDurationMinutes(10)
+                    .assignedStaff("配菜员小王")
+                    .equipment("电子秤")
+                    .qualityCheckpoints("食材新鲜度检查，重量准确性")
+                    .status(ProductionStep.StepStatus.COMPLETED)
+                    .qualityResult(ProductionStep.QualityResult.PASS)
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build(),
+
+                ProductionStep.builder()
+                    .productionBatch(batch)
+                    .stepNumber(2)
+                    .stepName("切配加工")
+                    .instructions("鸡胸肉切丁，青椒和胡萝卜切丝，花生米炒香")
+                    .plannedDurationMinutes(8)
+                    .assignedStaff("切配师小李")
+                    .equipment("切菜板，菜刀")
+                    .qualityCheckpoints("刀工标准，食材形状均匀")
+                    .status(ProductionStep.StepStatus.IN_PROGRESS)
+                    .qualityResult(ProductionStep.QualityResult.PENDING)
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build(),
+
+                ProductionStep.builder()
+                    .productionBatch(batch)
+                    .stepNumber(3)
+                    .stepName("烹饪制作")
+                    .instructions("热锅下油，加入葱姜蒜爆香，放入鸡丁翻炒，再加入配菜和花生米")
+                    .plannedDurationMinutes(15)
+                    .assignedStaff("厨师张三")
+                    .equipment("多功能炒锅A1")
+                    .qualityCheckpoints("火候控制，色泽鲜亮，口感鲜嫩")
+                    .status(ProductionStep.StepStatus.PENDING)
+                    .qualityResult(ProductionStep.QualityResult.PENDING)
+                    .createdBy("系统")
+                    .updatedBy("系统")
+                    .build()
+            };
+
+            for (ProductionStep step : steps) {
+                productionStepRepository.save(step);
+            }
+            System.out.println("✅ 生产步骤数据初始化完成");
         }
     }
 }

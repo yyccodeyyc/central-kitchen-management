@@ -126,86 +126,7 @@ export class ApiService {
     await api.delete(`/api/production-standards/${id}`);
   }
 
-  // 质量追溯管理
-  static async getQualityTraces(): Promise<QualityTrace[]> {
-    const response = await api.get('/api/quality-traces');
-    return response.data;
-  }
 
-  static async getQualityTrace(id: number): Promise<QualityTrace> {
-    const response = await api.get(`/api/quality-traces/${id}`);
-    return response.data;
-  }
-
-  static async createQualityTrace(data: Partial<QualityTrace>): Promise<QualityTrace> {
-    const response = await api.post('/api/quality-traces', data);
-    return response.data;
-  }
-
-  static async updateQualityTrace(id: number, data: Partial<QualityTrace>): Promise<QualityTrace> {
-    const response = await api.put(`/api/quality-traces/${id}`, data);
-    return response.data;
-  }
-
-  static async deleteQualityTrace(id: number): Promise<void> {
-    await api.delete(`/api/quality-traces/${id}`);
-  }
-
-  static async getExpiringSoonTraces(): Promise<QualityTrace[]> {
-    const response = await api.get('/api/quality-traces/expiring-soon');
-    return response.data;
-  }
-
-  static async performInspection(id: number, inspector: string, result: string, notes?: string): Promise<QualityTrace> {
-    const response = await api.post(`/api/quality-traces/${id}/inspect`, null, {
-      params: { inspector, result, notes }
-    });
-    return response.data;
-  }
-
-  // 供应商管理
-  static async getSuppliers(): Promise<Supplier[]> {
-    const response = await api.get('/api/suppliers');
-    return response.data;
-  }
-
-  static async getSupplier(id: number): Promise<Supplier> {
-    const response = await api.get(`/api/suppliers/${id}`);
-    return response.data;
-  }
-
-  static async createSupplier(data: Partial<Supplier>): Promise<Supplier> {
-    const response = await api.post('/api/suppliers', data);
-    return response.data;
-  }
-
-  static async updateSupplier(id: number, data: Partial<Supplier>): Promise<Supplier> {
-    const response = await api.put(`/api/suppliers/${id}`, data);
-    return response.data;
-  }
-
-  static async deleteSupplier(id: number): Promise<void> {
-    await api.delete(`/api/suppliers/${id}`);
-  }
-
-  static async getActiveSuppliers(): Promise<Supplier[]> {
-    const response = await api.get('/api/suppliers/active');
-    return response.data;
-  }
-
-  static async updateSupplierRating(id: number, rating: number): Promise<Supplier> {
-    const response = await api.post(`/api/suppliers/${id}/rate`, null, {
-      params: { rating }
-    });
-    return response.data;
-  }
-
-  static async updateSupplierStatus(id: number, status: string): Promise<Supplier> {
-    const response = await api.post(`/api/suppliers/${id}/status`, null, {
-      params: { status }
-    });
-    return response.data;
-  }
 
   // 手动触发检查
   static async triggerInventoryCheck(): Promise<string> {
@@ -227,6 +148,202 @@ export class ApiService {
   // 获取趋势分析
   static async getTrends(period: string) {
     const response = await api.get(`/api/analytics/trends/${period}`);
+    return response.data;
+  }
+
+  // ================ 库存管理API ================
+
+  // 库存项目管理
+  static async getInventory(): Promise<any[]> {
+    const response = await api.get('/api/inventory');
+    return response.data;
+  }
+
+  static async getInventoryItem(id: number): Promise<any> {
+    const response = await api.get(`/api/inventory/${id}`);
+    return response.data;
+  }
+
+  static async createInventoryItem(data: any): Promise<any> {
+    const response = await api.post('/api/inventory', data);
+    return response.data;
+  }
+
+  static async updateInventoryItem(id: number, data: any): Promise<any> {
+    const response = await api.put(`/api/inventory/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteInventoryItem(id: number): Promise<void> {
+    await api.delete(`/api/inventory/${id}`);
+  }
+
+  static async getLowStockItems(): Promise<any[]> {
+    const response = await api.get('/api/inventory/low-stock');
+    return response.data;
+  }
+
+  static async getInventoryAlerts(): Promise<any> {
+    const response = await api.get('/api/inventory/alerts');
+    return response.data;
+  }
+
+  static async updateStockLevel(id: number, quantity: number): Promise<any> {
+    const response = await api.patch(`/api/inventory/${id}/stock`, { quantity });
+    return response.data;
+  }
+
+  // 库存统计
+  static async getInventoryStats(): Promise<any> {
+    const response = await api.get('/api/inventory/stats');
+    return response.data;
+  }
+
+  // 库存盘点
+  static async createInventoryCheck(data: any): Promise<any> {
+    const response = await api.post('/api/inventory/checks', data);
+    return response.data;
+  }
+
+  static async getInventoryChecks(): Promise<any[]> {
+    const response = await api.get('/api/inventory/checks');
+    return response.data;
+  }
+
+  // ================ 质量管理API ================
+
+  // 质量追溯管理
+  static async getQualityTraces(): Promise<any[]> {
+    const response = await api.get('/api/quality/traces');
+    return response.data;
+  }
+
+  static async getQualityTrace(id: number): Promise<any> {
+    const response = await api.get(`/api/quality/traces/${id}`);
+    return response.data;
+  }
+
+  static async createQualityTrace(data: any): Promise<any> {
+    const response = await api.post('/api/quality/traces', data);
+    return response.data;
+  }
+
+  static async updateQualityTrace(id: number, data: any): Promise<any> {
+    const response = await api.put(`/api/quality/traces/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteQualityTrace(id: number): Promise<void> {
+    await api.delete(`/api/quality/traces/${id}`);
+  }
+
+  static async performQualityCheck(id: number, result: string, notes?: string): Promise<any> {
+    const response = await api.post(`/api/quality/traces/${id}/check`, { result, notes });
+    return response.data;
+  }
+
+  static async getQualityStats(): Promise<any> {
+    const response = await api.get('/api/quality/stats');
+    return response.data;
+  }
+
+  static async getExpiringItems(): Promise<any[]> {
+    const response = await api.get('/api/quality/expiring');
+    return response.data;
+  }
+
+  // ================ 供应商管理API ================
+
+  // 供应商管理
+  static async getSuppliers(): Promise<any[]> {
+    const response = await api.get('/api/suppliers');
+    return response.data;
+  }
+
+  static async getSupplier(id: number): Promise<any> {
+    const response = await api.get(`/api/suppliers/${id}`);
+    return response.data;
+  }
+
+  static async createSupplier(data: any): Promise<any> {
+    const response = await api.post('/api/suppliers', data);
+    return response.data;
+  }
+
+  static async updateSupplier(id: number, data: any): Promise<any> {
+    const response = await api.put(`/api/suppliers/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteSupplier(id: number): Promise<void> {
+    await api.delete(`/api/suppliers/${id}`);
+  }
+
+  static async getActiveSuppliers(): Promise<any[]> {
+    const response = await api.get('/api/suppliers/active');
+    return response.data;
+  }
+
+  static async updateSupplierRating(id: number, rating: number): Promise<any> {
+    const response = await api.post(`/api/suppliers/${id}/rating`, { rating });
+    return response.data;
+  }
+
+  static async getSupplierPerformance(): Promise<any> {
+    const response = await api.get('/api/suppliers/performance');
+    return response.data;
+  }
+
+  // ================ 系统管理API ================
+
+  // 用户管理
+  static async getUsers(): Promise<any[]> {
+    const response = await api.get('/api/users');
+    return response.data;
+  }
+
+  static async getUser(id: number): Promise<any> {
+    const response = await api.get(`/api/users/${id}`);
+    return response.data;
+  }
+
+  static async createUser(data: any): Promise<any> {
+    const response = await api.post('/api/users', data);
+    return response.data;
+  }
+
+  static async updateUser(id: number, data: any): Promise<any> {
+    const response = await api.put(`/api/users/${id}`, data);
+    return response.data;
+  }
+
+  static async deleteUser(id: number): Promise<void> {
+    await api.delete(`/api/users/${id}`);
+  }
+
+  static async changePassword(id: number, oldPassword: string, newPassword: string): Promise<void> {
+    await api.post(`/api/users/${id}/password`, { oldPassword, newPassword });
+  }
+
+  // 系统配置
+  static async getSystemConfig(): Promise<any> {
+    const response = await api.get('/api/system/config');
+    return response.data;
+  }
+
+  static async updateSystemConfig(data: any): Promise<any> {
+    const response = await api.put('/api/system/config', data);
+    return response.data;
+  }
+
+  // 系统监控
+  static async getSystemHealth(): Promise<any> {
+    const response = await api.get('/actuator/health');
+    return response.data;
+  }
+
+  static async getSystemMetrics(): Promise<any> {
+    const response = await api.get('/actuator/metrics');
     return response.data;
   }
 

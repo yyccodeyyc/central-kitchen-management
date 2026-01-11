@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  Container, Typography, Box, Card, CardContent, Grid,
+  Container, Typography, Box, Card, CardContent,
   TextField, Button, Switch, FormControlLabel, Divider,
   Alert, Paper, Avatar, IconButton
 } from '@mui/material';
@@ -57,9 +57,9 @@ const SystemSettings: React.FC = () => {
         </Alert>
       )}
 
-      <Grid container spacing={3}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' }, gap: 3 }}>
         {/* 用户信息设置 */}
-        <Grid xs={12} md={6}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -110,10 +110,10 @@ const SystemSettings: React.FC = () => {
               />
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* 界面设置 */}
-        <Grid xs={12} md={6}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -147,10 +147,10 @@ const SystemSettings: React.FC = () => {
               />
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* 系统设置 */}
-        <Grid xs={12} md={6}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -189,10 +189,10 @@ const SystemSettings: React.FC = () => {
               />
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* 安全设置 */}
-        <Grid xs={12} md={6}>
+        <Box>
           <Card>
             <CardContent>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
@@ -230,10 +230,10 @@ const SystemSettings: React.FC = () => {
               />
             </CardContent>
           </Card>
-        </Grid>
+        </Box>
 
         {/* 保存按钮 */}
-        <Grid xs={12}>
+        <Box sx={{ gridColumn: 'span 2' }}>
           <Paper sx={{ p: 2, display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
@@ -244,8 +244,8 @@ const SystemSettings: React.FC = () => {
               保存设置
             </Button>
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </Container>
   );
 };

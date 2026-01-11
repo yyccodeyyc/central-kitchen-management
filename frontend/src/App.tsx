@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import { Container, AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, Dashboard, Kitchen, Assessment, Inventory, People, Settings, Notifications } from '@mui/icons-material';
+import { Container, AppBar, Toolbar, Typography, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Avatar, Menu, MenuItem, Divider } from '@mui/material';
+import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { Menu as MenuIcon, Dashboard, Kitchen, Assessment, Inventory, People, Settings, Notifications, Logout, Person } from '@mui/icons-material';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ROLE_DISPLAY_NAMES, UserRole } from './types';
+import Login from './components/auth/Login';
 import DashboardComponent from './components/dashboard/Dashboard';
 import ProductionManagement from './components/production/ProductionManagement';
 import InventoryManagement from './components/inventory/InventoryManagement';
@@ -330,22 +333,62 @@ const theme = createTheme({
 });
 
 function AppContent() {
+  const { isAuthenticated, user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
 
-  const menuItems = [
-    { text: '仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
-    { text: '生产管理', icon: <Kitchen />, path: '/production', key: 'production' },
-    { text: '库存管理', icon: <Inventory />, path: '/inventory', key: 'inventory' },
-    { text: '质量控制', icon: <Assessment />, path: '/quality', key: 'quality' },
-    { text: '供应商管理', icon: <People />, path: '/suppliers', key: 'suppliers' },
-    { text: '系统设置', icon: <Settings />, path: '/settings', key: 'settings' },
-  ];
+  // 如果正在加载，显示加载状态
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Typography>加载中...</Typography>
+      </Box>
+    );
+  }
+
+  // 如果未认证，显示登录页面
+  if (!isAuthenticated || !user) {
+    return <Login onLogin={(user) => {
+      // 登录成功后重定向到首页
+      navigate('/');
+    }} />;
+  }
+
+  // 根据用户角色过滤菜单项
+  const getFilteredMenuItems = () => {
+    const allMenuItems = [
+      { text: '仪表板', icon: <Dashboard />, path: '/', key: 'dashboard', roles: ['ADMIN', 'PRODUCTION_MANAGER', 'QUALITY_INSPECTOR', 'INVENTORY_MANAGER', 'SUPPLIER_REPRESENTATIVE', 'VIEWER'] },
+      { text: '生产管理', icon: <Kitchen />, path: '/production', key: 'production', roles: ['ADMIN', 'PRODUCTION_MANAGER'] },
+      { text: '库存管理', icon: <Inventory />, path: '/inventory', key: 'inventory', roles: ['ADMIN', 'PRODUCTION_MANAGER', 'INVENTORY_MANAGER', 'QUALITY_INSPECTOR'] },
+      { text: '质量控制', icon: <Assessment />, path: '/quality', key: 'quality', roles: ['ADMIN', 'QUALITY_INSPECTOR', 'PRODUCTION_MANAGER'] },
+      { text: '供应商管理', icon: <People />, path: '/suppliers', key: 'suppliers', roles: ['ADMIN', 'SUPPLIER_REPRESENTATIVE', 'PRODUCTION_MANAGER'] },
+      { text: '系统设置', icon: <Settings />, path: '/settings', key: 'settings', roles: ['ADMIN'] },
+    ];
+
+    return allMenuItems.filter(item => item.roles.includes(user.role));
+  };
+
+  const menuItems = getFilteredMenuItems();
 
   const handleMenuClick = (path: string) => {
     navigate(path);
     setDrawerOpen(false);
+  };
+
+  const handleUserMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setUserMenuAnchor(event.currentTarget);
+  };
+
+  const handleUserMenuClose = () => {
+    setUserMenuAnchor(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleUserMenuClose();
+    navigate('/');
   };
 
   const getPageTitle = () => {
@@ -373,6 +416,19 @@ function AppContent() {
           <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 2 }}>
             🍽️ 中央厨房管理系统
           </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <Avatar sx={{ width: 40, height: 40, mr: 2, bgcolor: 'rgba(255,255,255,0.2)' }}>
+              {user.fullName.charAt(0)}
+            </Avatar>
+            <Box>
+              <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                {user.fullName}
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                {ROLE_DISPLAY_NAMES[user.role]}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
         <List>
           {menuItems.map((item) => (
@@ -416,7 +472,7 @@ function AppContent() {
               onClick={() => setDrawerOpen(true)}
               sx={{ mr: 2, color: 'text.primary' }}
             >
-              <Menu />
+              <MenuIcon />
             </IconButton>
             <Typography
               variant="h6"
@@ -432,9 +488,50 @@ function AppContent() {
             >
               {getPageTitle()}
             </Typography>
-            <IconButton sx={{ color: 'text.secondary' }}>
+
+            {/* 用户菜单 */}
+            <IconButton sx={{ color: 'text.secondary', mr: 1 }}>
               <Notifications />
             </IconButton>
+            <IconButton
+              onClick={handleUserMenuClick}
+              sx={{ color: 'text.primary' }}
+            >
+              <Avatar sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}>
+                {user.fullName.charAt(0)}
+              </Avatar>
+            </IconButton>
+
+            <Menu
+              anchorEl={userMenuAnchor}
+              open={Boolean(userMenuAnchor)}
+              onClose={handleUserMenuClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <Box sx={{ px: 2, py: 1 }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                  {user.fullName}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {ROLE_DISPLAY_NAMES[user.role]}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {user.department}
+                </Typography>
+              </Box>
+              <Divider />
+              <MenuItem onClick={handleLogout}>
+                <Logout sx={{ mr: 1 }} />
+                退出登录
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
 
@@ -471,12 +568,14 @@ function AppContent() {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router>
-        <AppContent />
-      </Router>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router>
+          <AppContent />
+        </Router>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

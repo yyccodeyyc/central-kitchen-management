@@ -294,3 +294,100 @@ export interface ProductionStats {
     qualityPassRate: number;
   };
 }
+
+// ================ 用户认证相关类型 ================
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  fullName: string;
+  role: UserRole;
+  department?: string;
+  avatar?: string;
+  isActive: boolean;
+  lastLogin?: string;
+  permissions: Permission[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type UserRole =
+  | 'ADMIN'
+  | 'PRODUCTION_MANAGER'
+  | 'QUALITY_INSPECTOR'
+  | 'INVENTORY_MANAGER'
+  | 'SUPPLIER_REPRESENTATIVE'
+  | 'VIEWER';
+
+export interface Permission {
+  id: string;
+  name: string;
+  resource: string;
+  action: 'CREATE' | 'READ' | 'UPDATE' | 'DELETE' | 'MANAGE';
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface LoginResponse {
+  user: User;
+  token: string;
+  refreshToken: string;
+  expiresIn: number;
+}
+
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: User | null;
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+}
+
+// 角色权限配置
+export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
+  ADMIN: [
+    { id: 'admin-all', name: '所有权限', resource: '*', action: 'MANAGE' }
+  ],
+  PRODUCTION_MANAGER: [
+    { id: 'production-read', name: '查看生产信息', resource: 'production', action: 'READ' },
+    { id: 'production-write', name: '管理生产订单', resource: 'production', action: 'UPDATE' },
+    { id: 'production-create', name: '创建生产订单', resource: 'production', action: 'CREATE' },
+    { id: 'inventory-read', name: '查看库存信息', resource: 'inventory', action: 'READ' },
+    { id: 'quality-read', name: '查看质量报告', resource: 'quality', action: 'READ' }
+  ],
+  QUALITY_INSPECTOR: [
+    { id: 'quality-read', name: '查看质量信息', resource: 'quality', action: 'READ' },
+    { id: 'quality-write', name: '执行质量检查', resource: 'quality', action: 'UPDATE' },
+    { id: 'quality-create', name: '创建质量报告', resource: 'quality', action: 'CREATE' },
+    { id: 'inventory-read', name: '查看相关库存', resource: 'inventory', action: 'READ' }
+  ],
+  INVENTORY_MANAGER: [
+    { id: 'inventory-read', name: '查看库存信息', resource: 'inventory', action: 'READ' },
+    { id: 'inventory-write', name: '管理库存', resource: 'inventory', action: 'UPDATE' },
+    { id: 'inventory-create', name: '录入库存', resource: 'inventory', action: 'CREATE' },
+    { id: 'inventory-delete', name: '删除库存记录', resource: 'inventory', action: 'DELETE' }
+  ],
+  SUPPLIER_REPRESENTATIVE: [
+    { id: 'supplier-read', name: '查看供应商信息', resource: 'supplier', action: 'READ' },
+    { id: 'supplier-write', name: '更新供应商信息', resource: 'supplier', action: 'UPDATE' },
+    { id: 'quality-read', name: '查看质量反馈', resource: 'quality', action: 'READ' }
+  ],
+  VIEWER: [
+    { id: 'dashboard-read', name: '查看仪表板', resource: 'dashboard', action: 'READ' },
+    { id: 'reports-read', name: '查看报表', resource: 'reports', action: 'READ' }
+  ]
+};
+
+// 角色显示名称
+export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
+  ADMIN: '系统管理员',
+  PRODUCTION_MANAGER: '生产主管',
+  QUALITY_INSPECTOR: '质量检查员',
+  INVENTORY_MANAGER: '库存管理员',
+  SUPPLIER_REPRESENTATIVE: '供应商代表',
+  VIEWER: '观察员'
+};

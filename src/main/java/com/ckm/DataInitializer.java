@@ -524,9 +524,9 @@ public class DataInitializer implements CommandLineRunner {
     private void initializeUsers() {
         if (userRepository.count() == 0) {
             User[] users = {
-                new User("admin", passwordEncoder.encode("admin123"), "admin@ckm.com", "ADMIN"),
-                new User("manager", passwordEncoder.encode("manager123"), "manager@ckm.com", "MANAGER"),
-                new User("staff", passwordEncoder.encode("staff123"), "staff@ckm.com", "STAFF")
+                new User("admin", passwordEncoder.encode("admin123"), "admin@ckm.com", User.UserRole.ADMIN),
+                new User("manager", passwordEncoder.encode("manager123"), "manager@ckm.com", User.UserRole.MANAGER),
+                new User("staff", passwordEncoder.encode("staff123"), "staff@ckm.com", User.UserRole.STAFF)
             };
 
             for (User user : users) {

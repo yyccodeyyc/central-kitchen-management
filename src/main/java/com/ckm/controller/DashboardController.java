@@ -23,9 +23,9 @@ public class DashboardController {
         model.addAttribute("totalFranchises", franchiseService.getTotalFranchises());
         model.addAttribute("activeFranchises", franchiseService.getActiveFranchiseCount());
         model.addAttribute("adminUsers", userService.findByRole(com.ckm.entity.User.UserRole.ADMIN).size());
-        model.addAttribute("franchiseUsers", userService.findByRole(com.ckm.entity.User.UserRole.FRANCHISEE).size());
-        model.addAttribute("managerUsers", userService.findByRole(com.ckm.entity.User.UserRole.STORE_MANAGER).size());
-        model.addAttribute("kitchenUsers", userService.findByRole(com.ckm.entity.User.UserRole.KITCHEN_MANAGER).size());
+        model.addAttribute("franchiseUsers", 0); // 暂时设为0
+        model.addAttribute("managerUsers", userService.findByRole(com.ckm.entity.User.UserRole.MANAGER).size());
+        model.addAttribute("kitchenUsers", 0); // 暂时设为0
 
         return "dashboard";
     }

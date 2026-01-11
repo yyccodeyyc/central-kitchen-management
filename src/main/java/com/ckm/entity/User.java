@@ -2,7 +2,7 @@ package com.ckm.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -24,9 +24,10 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank(message = "角色不能为空")
+    @NotNull(message = "角色不能为空")
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role; // ADMIN, MANAGER, STAFF
+    private UserRole role; // ADMIN, MANAGER, STAFF
 
     @Column
     private boolean enabled = true;
@@ -40,7 +41,7 @@ public class User {
     // Constructors
     public User() {}
 
-    public User(String username, String password, String email, String role) {
+    public User(String username, String password, String email, UserRole role) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -83,12 +84,22 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public String getRoleAsString() {
+        return role != null ? role.name() : null;
+    }
+
+    public void setRoleFromString(String roleString) {
+        if (roleString != null) {
+            this.role = UserRole.valueOf(roleString);
+        }
     }
 
     public boolean isEnabled() {
@@ -124,5 +135,21 @@ public class User {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = java.time.LocalDateTime.now();
+    }
+
+    public enum UserRole {
+        ADMIN("管理员"),
+        MANAGER("经理"),
+        STAFF("员工");
+
+        private final String description;
+
+        UserRole(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 }

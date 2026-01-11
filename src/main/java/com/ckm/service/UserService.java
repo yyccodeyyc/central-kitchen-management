@@ -40,8 +40,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User createUser(String username, String password, String email, String fullName, User.UserRole role) {
-        User user = new User(username, password, email, fullName, role);
+    public User createUser(String username, String password, String email, User.UserRole role) {
+        User user = new User(username, password, email, role);
         return saveUser(user);
     }
 

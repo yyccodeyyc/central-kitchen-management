@@ -2,7 +2,6 @@ package com.ckm.service;
 
 import com.ckm.entity.User;
 import com.ckm.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,11 +13,13 @@ import java.util.Optional;
 @Transactional
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -33,11 +34,15 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-        // 加密密码
-        if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
+        // 加密密码 - 检查是否已经是加密密码
+        if (user.getPassword() != null && !isEncodedPassword(user.getPassword())) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         return userRepository.save(user);
+    }
+
+    private boolean isEncodedPassword(String password) {
+        return password.startsWith("$2a$") || password.startsWith("$2b$") || password.startsWith("$2y$");
     }
 
     public User createUser(String username, String password, String email, User.UserRole role) {
@@ -58,9 +63,7 @@ public class UserService {
     }
 
     public List<User> findByRole(User.UserRole role) {
-        return userRepository.findAll().stream()
-                .filter(user -> user.getRole() == role)
-                .toList();
+        return userRepository.findByRole(role);
     }
 
     public long getTotalUsers() {

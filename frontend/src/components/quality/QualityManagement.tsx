@@ -91,73 +91,192 @@ const QualityManagement: React.FC = () => {
   const passRate = qualityData.length > 0 ? (passedCount / qualityData.length * 100).toFixed(1) : '0';
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-          🔍 质量控制
+    <Box sx={{
+      width: '100%',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      p: 4
+    }}>
+      {/* 页面标题区域 */}
+      <Box sx={{
+        mb: 4,
+        textAlign: 'center',
+        py: 4,
+        background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+        borderRadius: 4,
+        color: 'white',
+        boxShadow: '0 10px 30px rgba(6, 182, 212, 0.3)'
+      }}>
+        <Typography variant="h3" gutterBottom sx={{
+          fontWeight: 800,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          mb: 2
+        }}>
+          🔍 质量控制中心
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          食材质量追溯与检测管理
+        <Typography variant="h6" sx={{
+          opacity: 0.9,
+          fontWeight: 300,
+          maxWidth: 600,
+          mx: 'auto'
+        }}>
+          全程质量追溯，确保食材安全与合规
         </Typography>
       </Box>
 
       {/* 质量统计 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+        gap: 3,
+        mb: 4
+      }}>
+        <Card sx={{
+          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>📊</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 总检查批次
               </Typography>
-              <Typography variant="h4" component="div">
-                {qualityData.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {qualityData.length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              本期质量检查总数
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>📈</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 合格率
               </Typography>
-              <Typography variant="h4" component="div" color="success.main">
-                {passRate}%
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={parseFloat(passRate)}
-                sx={{ mt: 1, height: 6, borderRadius: 3 }}
-                color="success"
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {passRate}%
+            </Typography>
+            <LinearProgress
+              variant="determinate"
+              value={parseFloat(passRate)}
+              sx={{
+                mt: 2,
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: 'rgba(255,255,255,0.2)',
+                '& .MuiLinearProgress-bar': {
+                  borderRadius: 4,
+                }
+              }}
+              color="inherit"
+            />
+            <Typography variant="body2" sx={{ opacity: 0.8, mt: 1 }}>
+              质量达标百分比
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>🚫</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 不合格
               </Typography>
-              <Typography variant="h4" component="div" color="error">
-                {failedCount}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {failedCount}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              需要立即处理
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>⏳</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 待检查
               </Typography>
-              <Typography variant="h4" component="div" color="warning.main">
-                {pendingCount}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {pendingCount}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              等待质量检验
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* 质量预警 */}
       {failedCount > 0 && (
@@ -216,7 +335,12 @@ const QualityManagement: React.FC = () => {
                         查看
                       </Button>
                       {item.status === 'PENDING' && (
-                        <Button size="small" variant="contained" color="primary">
+                        <Button
+                          size="small"
+                          variant="contained"
+                          color="primary"
+                          onClick={() => {/* TODO: 实现质量检查功能 */}}
+                        >
                           检查
                         </Button>
                       )}
@@ -228,7 +352,7 @@ const QualityManagement: React.FC = () => {
           </TableContainer>
         </CardContent>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

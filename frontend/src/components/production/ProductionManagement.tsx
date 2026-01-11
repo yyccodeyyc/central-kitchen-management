@@ -58,7 +58,7 @@ const ProductionManagement: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingOrder, setEditingOrder] = useState<ProductionOrder | null>(null);
-  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' }>({
+  const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: 'success' | 'error' | 'info' }>({
     open: false,
     message: '',
     severity: 'success'
@@ -96,7 +96,7 @@ const ProductionManagement: React.FC = () => {
     }
   };
 
-  const showSnackbar = (message: string, severity: 'success' | 'error') => {
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info') => {
     setSnackbar({ open: true, message, severity });
   };
 
@@ -116,6 +116,41 @@ const ProductionManagement: React.FC = () => {
       notes: ''
     });
     setDialogOpen(true);
+  };
+
+  const handleCreateSchedule = () => {
+    // TODO: 实现排程创建对话框
+    showSnackbar('排程创建功能开发中', 'info');
+  };
+
+  const handleConfirmSchedule = async (id: number) => {
+    try {
+      await ApiService.confirmSchedule(id, '系统用户');
+      showSnackbar('排程已确认', 'success');
+      loadData();
+    } catch (error) {
+      showSnackbar('确认排程失败', 'error');
+    }
+  };
+
+  const handleStartSchedule = async (id: number) => {
+    try {
+      await ApiService.startSchedule(id, '系统用户');
+      showSnackbar('排程已开始', 'success');
+      loadData();
+    } catch (error) {
+      showSnackbar('开始排程失败', 'error');
+    }
+  };
+
+  const handleCompleteSchedule = async (id: number) => {
+    try {
+      await ApiService.completeSchedule(id, '系统用户');
+      showSnackbar('排程已完成', 'success');
+      loadData();
+    } catch (error) {
+      showSnackbar('完成排程失败', 'error');
+    }
   };
 
   const handleEditOrder = (order: ProductionOrder) => {
@@ -216,16 +251,88 @@ const ProductionManagement: React.FC = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 3, fontWeight: 'bold' }}>
-        生产计划与排程管理
-      </Typography>
+    <Box sx={{
+      width: '100%',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      p: 4
+    }}>
+      {/* 页面标题区域 */}
+      <Box sx={{
+        mb: 4,
+        textAlign: 'center',
+        py: 4,
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        borderRadius: 4,
+        color: 'white',
+        boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)'
+      }}>
+        <Typography variant="h3" gutterBottom sx={{
+          fontWeight: 800,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          mb: 2
+        }}>
+          🏭 生产计划与排程管理
+        </Typography>
+        <Typography variant="h6" sx={{
+          opacity: 0.9,
+          fontWeight: 300,
+          maxWidth: 600,
+          mx: 'auto'
+        }}>
+          智能生产调度，优化资源配置，提升运营效率
+        </Typography>
+      </Box>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={tabValue} onChange={handleTabChange} aria-label="production management tabs">
-          <Tab label="生产订单" />
-          <Tab label="生产排程" />
-          <Tab label="生产监控" />
+      {/* 标签页导航 */}
+      <Box sx={{
+        mb: 4,
+        backgroundColor: 'white',
+        borderRadius: 3,
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden'
+      }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          aria-label="production management tabs"
+          sx={{
+            '& .MuiTabs-indicator': {
+              height: 4,
+              borderRadius: 2,
+              background: 'linear-gradient(90deg, #667eea, #764ba2)',
+            },
+            '& .MuiTab-root': {
+              fontWeight: 600,
+              fontSize: '1rem',
+              textTransform: 'none',
+              minHeight: 64,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                backgroundColor: 'rgba(102, 126, 234, 0.04)',
+              },
+              '&.Mui-selected': {
+                color: '#6366f1',
+                fontWeight: 700,
+              },
+            },
+          }}
+        >
+          <Tab
+            icon={<span style={{ fontSize: '1.5rem' }}>📋</span>}
+            label="生产订单"
+            iconPosition="start"
+          />
+          <Tab
+            icon={<span style={{ fontSize: '1.5rem' }}>⏰</span>}
+            label="生产排程"
+            iconPosition="start"
+          />
+          <Tab
+            icon={<span style={{ fontSize: '1.5rem' }}>📊</span>}
+            label="生产监控"
+            iconPosition="start"
+          />
         </Tabs>
       </Box>
 
@@ -340,7 +447,7 @@ const ProductionManagement: React.FC = () => {
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            onClick={() => {/* TODO: 实现排程创建 */}}
+            onClick={handleCreateSchedule}
           >
             创建排程
           </Button>
@@ -383,7 +490,7 @@ const ProductionManagement: React.FC = () => {
                       <Button
                         size="small"
                         color="primary"
-                        onClick={() => {/* TODO: 确认排程 */}}
+                        onClick={() => handleConfirmSchedule(schedule.id)}
                       >
                         确认
                       </Button>
@@ -392,7 +499,7 @@ const ProductionManagement: React.FC = () => {
                       <Button
                         size="small"
                         color="secondary"
-                        onClick={() => {/* TODO: 开始排程 */}}
+                        onClick={() => handleStartSchedule(schedule.id)}
                       >
                         开始
                       </Button>
@@ -401,7 +508,7 @@ const ProductionManagement: React.FC = () => {
                       <Button
                         size="small"
                         color="success"
-                        onClick={() => {/* TODO: 完成排程 */}}
+                        onClick={() => handleCompleteSchedule(schedule.id)}
                       >
                         完成
                       </Button>
@@ -416,24 +523,241 @@ const ProductionManagement: React.FC = () => {
 
       {/* 生产监控标签页 */}
       <TabPanel value={tabValue} index={2}>
-        <Typography variant="h6" gutterBottom>生产监控仪表板</Typography>
-        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-          <Card sx={{ flex: '1 1 300px' }}>
-            <CardContent>
-              <Typography variant="h6" color="primary">待处理订单</Typography>
-              <Typography variant="h4">{orders.filter(o => o.status === 'PENDING').length}</Typography>
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: '#1e293b' }}>
+            📊 生产监控仪表板
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+            实时监控生产状态，掌握运营情况
+          </Typography>
+        </Box>
+
+        {/* 统计卡片网格 */}
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+          gap: 3,
+          mb: 4
+        }}>
+          <Card sx={{
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            position: 'relative',
+            overflow: 'visible',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+              borderRadius: 'inherit',
+            }
+          }}>
+            <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <span style={{ fontSize: '1.5rem', marginRight: '8px' }}>⏳</span>
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  待处理订单
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+                {orders.filter(o => o.status === 'PENDING').length}
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                需要审批的生产订单
+              </Typography>
             </CardContent>
           </Card>
-          <Card sx={{ flex: '1 1 300px' }}>
-            <CardContent>
-              <Typography variant="h6" color="secondary">进行中订单</Typography>
-              <Typography variant="h4">{orders.filter(o => o.status === 'IN_PRODUCTION').length}</Typography>
+
+          <Card sx={{
+            background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+            color: 'white',
+            position: 'relative',
+            overflow: 'visible',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+              borderRadius: 'inherit',
+            }
+          }}>
+            <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <span style={{ fontSize: '1.5rem', marginRight: '8px' }}>⚙️</span>
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  进行中订单
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+                {orders.filter(o => o.status === 'IN_PRODUCTION').length}
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                当前生产线上的订单
+              </Typography>
             </CardContent>
           </Card>
-          <Card sx={{ flex: '1 1 300px' }}>
+
+          <Card sx={{
+            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+            color: 'white',
+            position: 'relative',
+            overflow: 'visible',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+              borderRadius: 'inherit',
+            }
+          }}>
+            <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <span style={{ fontSize: '1.5rem', marginRight: '8px' }}>✅</span>
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  已完成订单
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+                {orders.filter(o => o.status === 'COMPLETED').length}
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                本周期完成的订单
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card sx={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            color: 'white',
+            position: 'relative',
+            overflow: 'visible',
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+              borderRadius: 'inherit',
+            }
+          }}>
+            <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                <span style={{ fontSize: '1.5rem', marginRight: '8px' }}>📈</span>
+                <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                  完成率
+                </Typography>
+              </Box>
+              <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+                {orders.length > 0 ? Math.round((orders.filter(o => o.status === 'COMPLETED').length / orders.length) * 100) : 0}%
+              </Typography>
+              <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                订单完成百分比
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+
+        {/* 生产状态图表区域 */}
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+          gap: 4
+        }}>
+          <Card sx={{ height: '100%' }}>
             <CardContent>
-              <Typography variant="h6" color="success">已完成订单</Typography>
-              <Typography variant="h4">{orders.filter(o => o.status === 'COMPLETED').length}</Typography>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: '#374151' }}>
+                📋 订单状态分布
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                {[
+                  { label: '待处理', count: orders.filter(o => o.status === 'PENDING').length, color: '#f59e0b' },
+                  { label: '已批准', count: orders.filter(o => o.status === 'APPROVED').length, color: '#6366f1' },
+                  { label: '已排程', count: orders.filter(o => o.status === 'SCHEDULED').length, color: '#06b6d4' },
+                  { label: '生产中', count: orders.filter(o => o.status === 'IN_PRODUCTION').length, color: '#10b981' },
+                  { label: '已完成', count: orders.filter(o => o.status === 'COMPLETED').length, color: '#059669' },
+                ].map((item) => (
+                  <Box key={item.label} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box
+                        sx={{
+                          width: 12,
+                          height: 12,
+                          borderRadius: '50%',
+                          backgroundColor: item.color,
+                          mr: 2
+                        }}
+                      />
+                      <Typography variant="body2">{item.label}</Typography>
+                    </Box>
+                    <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                      {item.count}
+                    </Typography>
+                  </Box>
+                ))}
+              </Box>
+            </CardContent>
+          </Card>
+
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: '#374151' }}>
+                ⏰ 近期生产活动
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                {orders.slice(0, 5).map((order, index) => (
+                  <Box key={order.id} sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: index % 2 === 0 ? '#f8fafc' : 'white',
+                    border: '1px solid rgba(148, 163, 184, 0.1)'
+                  }}>
+                    <Box sx={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: '50%',
+                      backgroundColor: getStatusColor(order.status),
+                      mr: 2
+                    }} />
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                        订单 #{order.orderNumber}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {new Date(order.requiredDate).toLocaleDateString()}
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={order.status === 'PENDING' ? '待处理' :
+                             order.status === 'APPROVED' ? '已批准' :
+                             order.status === 'SCHEDULED' ? '已排程' :
+                             order.status === 'IN_PRODUCTION' ? '生产中' :
+                             order.status === 'COMPLETED' ? '已完成' : '已取消'}
+                      color={getStatusColor(order.status)}
+                      size="small"
+                    />
+                  </Box>
+                ))}
+                {orders.length === 0 && (
+                  <Box sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography variant="body2" color="text.secondary">
+                      暂无生产订单
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
             </CardContent>
           </Card>
         </Box>

@@ -17,9 +17,9 @@ const InventoryManagement: React.FC = () => {
   const loadInventoryData = async () => {
     setLoading(true);
     try {
-      // 这里应该调用真实的API
-      // const response = await api.getInventory();
-      // setInventoryData(response.data);
+      // TODO: 实现库存API调用
+      // const response = await ApiService.getInventory();
+      // setInventoryData(response);
 
       // 暂时使用模拟数据
       const mockData = [
@@ -94,74 +94,200 @@ const InventoryManagement: React.FC = () => {
   const lowStockItems = inventoryData.filter(item => item.status === 'LOW');
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-          📦 库存管理
+    <Box sx={{
+      width: '100%',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      p: 4
+    }}>
+      {/* 页面标题区域 */}
+      <Box sx={{
+        mb: 4,
+        textAlign: 'center',
+        py: 4,
+        background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+        borderRadius: 4,
+        color: 'white',
+        boxShadow: '0 10px 30px rgba(99, 102, 241, 0.3)'
+      }}>
+        <Typography variant="h3" gutterBottom sx={{
+          fontWeight: 800,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          mb: 2
+        }}>
+          📦 库存管理中心
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          实时监控库存状态，及时补货预警
+        <Typography variant="h6" sx={{
+          opacity: 0.9,
+          fontWeight: 300,
+          maxWidth: 600,
+          mx: 'auto'
+        }}>
+          智能库存监控，精准补货预警，确保生产连续性
         </Typography>
       </Box>
 
       {/* 库存预警提示 */}
       {lowStockItems.length > 0 && (
-        <Alert severity="warning" sx={{ mb: 3 }}>
-          ⚠️ 发现 {lowStockItems.length} 项库存不足的物料，需要及时补货
+        <Alert
+          severity="warning"
+          sx={{
+            mb: 4,
+            borderRadius: 3,
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.15)',
+            background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+            border: '1px solid #f59e0b'
+          }}
+          icon={<span style={{ fontSize: '1.5rem' }}>⚠️</span>}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
+            库存预警通知
+          </Typography>
+          <Typography>
+            发现 <strong>{lowStockItems.length}</strong> 项库存不足的物料，需要及时补货以确保生产连续性
+          </Typography>
         </Alert>
       )}
 
-      {/* 统计卡片 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+      {/* 统计卡片网格 */}
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+        gap: 3,
+        mb: 4
+      }}>
+        <Card sx={{
+          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>📊</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 总物料种类
               </Typography>
-              <Typography variant="h4" component="div">
-                {inventoryData.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {inventoryData.length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              管理的物料总数
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>🚨</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 库存不足
               </Typography>
-              <Typography variant="h4" component="div" color="error">
-                {lowStockItems.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {lowStockItems.length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              需要紧急补货
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>✅</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 库存正常
               </Typography>
-              <Typography variant="h4" component="div" color="success.main">
-                {inventoryData.filter(item => item.status === 'NORMAL').length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {inventoryData.filter(item => item.status === 'NORMAL').length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              库存状态良好
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>📈</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 库存充足
               </Typography>
-              <Typography variant="h4" component="div" color="warning.main">
-                {inventoryData.filter(item => item.status === 'HIGH').length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {inventoryData.filter(item => item.status === 'HIGH').length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              库存充裕无忧
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* 库存明细表 */}
       <Card>
@@ -222,7 +348,7 @@ const InventoryManagement: React.FC = () => {
           </TableContainer>
         </CardContent>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

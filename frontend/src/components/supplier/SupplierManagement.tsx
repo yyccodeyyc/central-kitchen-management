@@ -99,67 +99,182 @@ const SupplierManagement: React.FC = () => {
   };
 
   return (
-    <Container maxWidth="xl">
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-          🤝 供应商管理
+    <Box sx={{
+      width: '100%',
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      p: 4
+    }}>
+      {/* 页面标题区域 */}
+      <Box sx={{
+        mb: 4,
+        textAlign: 'center',
+        py: 4,
+        background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+        borderRadius: 4,
+        color: 'white',
+        boxShadow: '0 10px 30px rgba(139, 92, 246, 0.3)'
+      }}>
+        <Typography variant="h3" gutterBottom sx={{
+          fontWeight: 800,
+          textShadow: '2px 2px 4px rgba(0,0,0,0.3)',
+          mb: 2
+        }}>
+          🤝 供应商管理中心
         </Typography>
-        <Typography variant="body1" color="text.secondary">
-          供应商信息管理与绩效评估
+        <Typography variant="h6" sx={{
+          opacity: 0.9,
+          fontWeight: 300,
+          maxWidth: 600,
+          mx: 'auto'
+        }}>
+          供应商信息管理与绩效评估，确保供应链稳定可靠
         </Typography>
       </Box>
 
       {/* 供应商统计 */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+      <Box sx={{
+        display: 'grid',
+        gridTemplateColumns: {
+          xs: '1fr',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(4, 1fr)'
+        },
+        gap: 3,
+        mb: 4
+      }}>
+        <Card sx={{
+          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>📊</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 总供应商数
               </Typography>
-              <Typography variant="h4" component="div">
-                {suppliers.length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {suppliers.length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              已合作供应商总数
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>🏆</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 A级供应商
               </Typography>
-              <Typography variant="h4" component="div" color="success.main">
-                {suppliers.filter(s => s.qualityGrade === 'A级').length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {suppliers.filter(s => s.qualityGrade === 'A级').length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              优质供应商数量
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>⭐</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 平均评分
               </Typography>
-              <Typography variant="h4" component="div" color="warning.main">
-                {(suppliers.reduce((sum, s) => sum + s.rating, 0) / suppliers.length).toFixed(1)}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card>
-            <CardContent>
-              <Typography color="textSecondary" gutterBottom>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {(suppliers.reduce((sum, s) => sum + s.rating, 0) / suppliers.length).toFixed(1)}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              供应商综合评分
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Card sx={{
+          background: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+          color: 'white',
+          position: 'relative',
+          overflow: 'visible',
+          height: '100%',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
+            borderRadius: 'inherit',
+          }
+        }}>
+          <CardContent sx={{ position: 'relative', zIndex: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <span style={{ fontSize: '2rem', marginRight: '12px' }}>✅</span>
+              <Typography variant="h6" sx={{ fontWeight: 500 }}>
                 活跃供应商
               </Typography>
-              <Typography variant="h4" component="div" color="primary.main">
-                {suppliers.filter(s => s.status === 'ACTIVE').length}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+            </Box>
+            <Typography variant="h3" sx={{ fontWeight: 800, mb: 1 }}>
+              {suppliers.filter(s => s.status === 'ACTIVE').length}
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.8 }}>
+              正常合作供应商
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* 供应商列表 */}
       <Card>
@@ -231,10 +346,12 @@ const SupplierManagement: React.FC = () => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Button size="small" variant="outlined" sx={{ mr: 1 }}>
+                      <Button size="small" variant="outlined" sx={{ mr: 1 }}
+                        onClick={() => {/* TODO: 实现编辑功能 */}}>
                         编辑
                       </Button>
-                      <Button size="small" variant="outlined">
+                      <Button size="small" variant="outlined"
+                        onClick={() => {/* TODO: 实现详情查看功能 */}}>
                         详情
                       </Button>
                     </TableCell>
@@ -245,7 +362,7 @@ const SupplierManagement: React.FC = () => {
           </TableContainer>
         </CardContent>
       </Card>
-    </Container>
+    </Box>
   );
 };
 

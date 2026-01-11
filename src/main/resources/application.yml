@@ -77,11 +77,54 @@ management:
     diskspace:
       enabled: true
 
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: 0
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+        max-wait: -1ms
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000  # 1 hour
+      key-prefix: "ckm:"
+      use-key-prefix: true
+      cache-null-values: false
+
 ckm:
   security:
     jwt:
       secret: mySecretKey1234567890123456789012345678901234567890
       expiration: 86400000  # 24 hours in milliseconds
+
+  cache:
+    user:
+      ttl: 1800000  # 30 minutes
+    production:
+      ttl: 900000   # 15 minutes
+    inventory:
+      ttl: 300000   # 5 minutes
+
+  rate-limit:
+    enabled: true
+    requests-per-minute: 60
+    burst-capacity: 100
+
+  circuit-breaker:
+    enabled: true
+    failure-rate-threshold: 50
+    slow-call-rate-threshold: 50
+    slow-call-duration-threshold: 2000
+    minimum-number-of-calls: 5
+    sliding-window-size: 10
+    wait-duration-in-open-state: 10000
 
 ---
 # Development profile

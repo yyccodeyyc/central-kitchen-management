@@ -356,18 +356,44 @@ function AppContent() {
     }} />;
   }
 
-  // 根据用户角色过滤菜单项
+  // 根据用户角色获取专属菜单项
   const getFilteredMenuItems = () => {
-    const allMenuItems = [
-      { text: '仪表板', icon: <Dashboard />, path: '/', key: 'dashboard', roles: ['ADMIN', 'PRODUCTION_MANAGER', 'QUALITY_INSPECTOR', 'INVENTORY_MANAGER', 'SUPPLIER_REPRESENTATIVE', 'VIEWER'] },
-      { text: '生产管理', icon: <Kitchen />, path: '/production', key: 'production', roles: ['ADMIN', 'PRODUCTION_MANAGER'] },
-      { text: '库存管理', icon: <Inventory />, path: '/inventory', key: 'inventory', roles: ['ADMIN', 'PRODUCTION_MANAGER', 'INVENTORY_MANAGER', 'QUALITY_INSPECTOR'] },
-      { text: '质量控制', icon: <Assessment />, path: '/quality', key: 'quality', roles: ['ADMIN', 'QUALITY_INSPECTOR', 'PRODUCTION_MANAGER'] },
-      { text: '供应商管理', icon: <People />, path: '/suppliers', key: 'suppliers', roles: ['ADMIN', 'SUPPLIER_REPRESENTATIVE', 'PRODUCTION_MANAGER'] },
-      { text: '系统设置', icon: <Settings />, path: '/settings', key: 'settings', roles: ['ADMIN'] },
-    ];
+    const roleMenus = {
+      ADMIN: [
+        { text: '仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
+        { text: '生产管理', icon: <Kitchen />, path: '/production', key: 'production' },
+        { text: '库存管理', icon: <Inventory />, path: '/inventory', key: 'inventory' },
+        { text: '质量控制', icon: <Assessment />, path: '/quality', key: 'quality' },
+        { text: '供应商管理', icon: <People />, path: '/suppliers', key: 'suppliers' },
+        { text: '系统设置', icon: <Settings />, path: '/settings', key: 'settings' },
+      ],
+      PRODUCTION_MANAGER: [
+        { text: '生产仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
+        { text: '生产管理', icon: <Kitchen />, path: '/production', key: 'production' },
+        { text: '库存监控', icon: <Inventory />, path: '/inventory', key: 'inventory' },
+        { text: '质量报告', icon: <Assessment />, path: '/quality', key: 'quality' },
+      ],
+      QUALITY_INSPECTOR: [
+        { text: '质量仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
+        { text: '质量检查', icon: <Assessment />, path: '/quality', key: 'quality' },
+        { text: '库存查询', icon: <Inventory />, path: '/inventory', key: 'inventory' },
+      ],
+      INVENTORY_MANAGER: [
+        { text: '库存仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
+        { text: '库存管理', icon: <Inventory />, path: '/inventory', key: 'inventory' },
+        { text: '质量追踪', icon: <Assessment />, path: '/quality', key: 'quality' },
+      ],
+      SUPPLIER_REPRESENTATIVE: [
+        { text: '供应商仪表板', icon: <Dashboard />, path: '/', key: 'dashboard' },
+        { text: '供应商管理', icon: <People />, path: '/suppliers', key: 'suppliers' },
+        { text: '质量反馈', icon: <Assessment />, path: '/quality', key: 'quality' },
+      ],
+      VIEWER: [
+        { text: '数据概览', icon: <Dashboard />, path: '/', key: 'dashboard' },
+      ],
+    };
 
-    return allMenuItems.filter(item => item.roles.includes(user.role));
+    return roleMenus[user.role] || roleMenus.VIEWER;
   };
 
   const menuItems = getFilteredMenuItems();

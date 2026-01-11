@@ -350,10 +350,7 @@ function AppContent() {
 
   // 如果未认证，显示登录页面
   if (!isAuthenticated || !user) {
-    return <Login onLogin={(user) => {
-      // 登录成功后重定向到首页
-      navigate('/');
-    }} />;
+    return <Login />;
   }
 
   // 根据用户角色获取专属菜单项

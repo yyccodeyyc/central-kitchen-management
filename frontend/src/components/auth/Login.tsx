@@ -21,14 +21,15 @@ import {
   Business,
   Visibility
 } from '@mui/icons-material';
-import { ApiService } from '../../services/api';
+import { useAuth } from '../../contexts/AuthContext';
 import { User, LoginRequest, ROLE_DISPLAY_NAMES, UserRole } from '../../types';
 
 interface LoginProps {
-  onLogin: (user: User) => void;
+  onLogin?: (user: User) => void;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState<LoginRequest>({
     username: '',
     password: ''
@@ -69,7 +70,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       // 模拟延迟
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      onLogin(mockUser);
+      // 使用AuthContext的login方法
+      login(mockUser);
     } catch (err) {
       setError('登录失败，请检查用户名和密码');
     } finally {
